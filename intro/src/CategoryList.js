@@ -22,7 +22,7 @@ export default class CategoryList extends Component {
                 <ListGroup>
                     {
                         this.state.categories.map(category => (
-                            <ListGroupItem onClick={() => this.props.changeCategory(category)} key={category.id}>
+                            <ListGroupItem active={category.categoryName===this.props.currentCategory?true:false} onClick={() => this.props.changeCategory(category)} key={category.id}>
                                 {category.categoryName}
                             </ListGroupItem>
                         ))
