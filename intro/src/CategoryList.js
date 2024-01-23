@@ -10,7 +10,6 @@ export default class CategoryList extends Component {
         this.getCategories();
     }
 
-
     getCategories = () => {
         fetch("http://localhost:3000/categories")
             .then(response => response.json())
