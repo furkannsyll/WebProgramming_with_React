@@ -4,6 +4,9 @@ import CategoryList from './CategoryList';
 import ProductList from './ProductList';
 import { Col, Container, Row } from 'reactstrap';
 import alertify from 'alertifyjs';
+import { Route, Routes } from 'react-router-dom';
+import NotFound from './NotFound';
+import CartList from './CartList';
 export default class App extends Component {
   state = { currentCategory: "", products: [], cart: [] }
 
@@ -27,21 +30,21 @@ export default class App extends Component {
       .then(data => this.setState({ products: data }));
   }
 
-  addToCart = (product) =>{
+  addToCart = (product) => {
     let newCart = this.state.cart;
     var addedItem = newCart.find(c => c.product.id === product.id);
     if (addedItem) {
       addedItem.quantity += 1;
-    }else {
-      newCart.push({product:product, quantity:1});
+    } else {
+      newCart.push({ product: product, quantity: 1 });
     }
-    this.setState({cart:newCart});
-    alertify.success(product.productName + " added to cart!",2)
+    this.setState({ cart: newCart });
+    alertify.success(product.productName + " added to cart!", 2)
   }
 
-  removeFromCart=(product)=>{
-    let newCart = this.state.cart.filter(c=>c.product.id!==product.id);
-    this.setState({cart:newCart});
+  removeFromCart = (product) => {
+    let newCart = this.state.cart.filter(c => c.product.id !== product.id);
+    this.setState({ cart: newCart });
   }
 
   render() {
@@ -50,13 +53,18 @@ export default class App extends Component {
     return (
       <div>
         <Container>
-          <Navi cart={this.state.cart} removeFromCart={this.removeFromCart}/>
+          <Navi cart={this.state.cart} removeFromCart={this.removeFromCart} />
           <Row>
             <Col xs="3">
               <CategoryList currentCategory={this.state.currentCategory} changeCategory={this.changeCategory} info={categoryInfo} />
             </Col>
             <Col xs="9">
-              <ProductList currentCategory={this.state.currentCategory} products={this.state.products} addToCart={this.addToCart} info={productInfo} />
+              <Routes>
+                <Route path='/' element={ <ProductList currentCategory={this.state.currentCategory} products={this.state.products} addToCart={this.addToCart} info={productInfo} />} />
+                <Route path='/cart' element={<CartList />} />
+                <Route path='*' element={<NotFound />} />
+              </Routes>
+
             </Col>
           </Row>
         </Container>
